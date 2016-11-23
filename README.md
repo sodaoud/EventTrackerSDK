@@ -42,6 +42,13 @@ Track any event in the application using a name that matches the regex \'^ev_[A-
     String name = "ev_test1";
     EventTracker.getInstance().sendEvent(name);
 
+You can add a Map of custom params to the event:
+    
+    String name = "ev_test2";
+    Map<String, String> params = new HashMap<>();
+    params.put("key", "value");
+    EventTracker.getInstance().sendEvent(name, params);
+
 You can test if a name matches the regex using:
 
     EventTracker.getInstance().validateName(name);
