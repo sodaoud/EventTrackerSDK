@@ -28,3 +28,40 @@ Functional design
  * The challenge should not take more than 5 days
  * The source code should be available for us via Bitbucket or GitHub
  * Think of this project as something that would be continued with a team as an actual SDK
+ 
+ ### Setup
+ 
+Download the AAR file and copy it into the folder libs of your Android application project, add the dependecy into the build.gradle file.
+ 
+Initialize the EventTracker using a context object and the Api Key:
+     
+    EventTracker.init(mContext, "your_api_key");
+     
+Track any event in the application using a name that matches the regex \'^ev_[A-Za-z0-9]+\':
+    
+    String name = "ev_test1";
+    EventTracker.getInstance().sendEvent(name);
+
+You can test if a name matches the regex using:
+
+    EventTracker.getInstance().validateName(name);
+
+All events will be delivered to the server, there is two configurations for the delivery, by number of events (Default is 1) and periodically, You can change the configuration any time:
+
+    EventTracker.getInstance().setPostType(EventTracker.POST_TYPE_PERIODIC); // sets the configuration to periodic
+    EventTracker.getInstance().setPeriodicTime(5000); // sets the period to 5s
+
+You can also change the number of events tracked before delivery:
+
+    EventTracker.getInstance().setPostType(EventTracker.POST_TYPE_NUMBER); // sets the configuration to number
+    EventTracker.getInstance().setNumberOfEventsToPost(30); // sets the number to 30 events until delivery
+
+The EventTracker uses HttpURLConnection to deliver events unless the application developer has included OkHttp3 in his project than the EventTracker will use OkHttp3, the developer can than sets a custom client:
+
+    OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(1, TimeUnit.SECONDS)
+                        .readTimeout(1, TimeUnit.SECONDS)
+                        .build();
+    EventTracker.getInstance().setClient(client);
+ 
+
